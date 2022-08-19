@@ -71,6 +71,7 @@ class ssh::server (
   Array                          $options_absent         = [],
   Hash                           $match_block            = {},
   Boolean                        $use_issue_net          = false,
+  Boolean                        $autodetect_hostcertificates = false,
   Optional[Stdlib::Absolutepath] $sshd_environments_file = undef,
   Optional[String[1]]            $server_package_name    = undef,
 ) {

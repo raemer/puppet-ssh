@@ -52,4 +52,14 @@ class ssh::server::config {
       order   => '01',
     }
   }
+
+  if ($ssh::server::autodetect_hostcertificates) {
+    if(has_key($facts,'ssh')){
+      concat::fragment{ 'autodetected host certificates':
+        target  => $ssh::server::sshd_config,
+        content => $facts['ssh'].keys().map |$k| {"HostCertificate /etc/ssh/ssh_host_${k}_key-cert.pub\n"}.join(''), #DEBUG: remove comment
+        order   => '02',
+      }
+	}
+  }
 }

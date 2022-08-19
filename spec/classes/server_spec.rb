@@ -92,6 +92,26 @@ describe 'ssh::server', type: 'class' do
 
         it { is_expected.not_to contain_class('ssh::knownhosts') }
       end
+
+      context 'with autodetect_hostcertificates enabled' do
+        let :params do
+          {
+            autodetect_hostcertificates: true,
+          }
+        end
+        let :facts do
+          os_facts.merge(
+          {
+            ssh: {
+              ecdsa: { fingerprints: {}},
+              rsa:  { fingerprints: {}},
+            }
+          }
+          )
+        end
+
+        it { is_expected.to contain_concat__fragment('autodetected host certificates').with_content("#HostCertificate /etc/ssh/ssh_host_ecdsa_key-cert.pub\n#HostCertificate /etc/ssh/ssh_host_rsa_key-cert.pub\n") }
+      end
     end
   end
 end
